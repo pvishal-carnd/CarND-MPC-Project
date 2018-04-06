@@ -1,13 +1,14 @@
-# Model predictive control
 
-A Model Predictive Controller to drive a car around a simulated track at 50 mph.
+# Model predictive control
+A Model Predictive Controller is used to drive a car around a simulated track at 50 mph.
 
 ## Model
-A simple kinematic model bicycle model was used for sSetting up motion cconstraints in the optimizer
+A simple kinematic model bicycle model was used for setting up motion cconstraints in the optimizer. The equations are as follows:
+
+![Model](imgs/eq1.png)
 
 
 ## Pre-processing
-
 The waypoints provided by the simulator were transformed relative to the car. Lines `129 to 139` in `main.cpp` describe this simple euclidean transform.
 
 ## Polynomial fitting
@@ -17,12 +18,10 @@ The target way point are used to fit a polynomial through them. This polynomial 
 The controller uses the `IPOPT` package to solve for the optimal control inputs by propagating the system model forward for a specified time horizon. The numbers were selected after trial and error. A 1s "look ahead" with time-step of 10s was found to be sufficient. Very high lookahead values caused performance problems on low-spec virtual machine. Very low lookahead values on the other hand, caused instabilities around sharp turns. 
 
 ## Lag compensation
-
 Lag compensation was achieved by propagating the state forward by estimating the system state around the time the actuator command would actually be given. This was done using the dyammic model of the system and current throttle and steering value. Ideally, the acceleration of the vehicle should be used here but throttle is used as an approximation to it. Line `145 - 152` implement this case. The performance was tested for 100ms of lag.
 
 
 ## Dependencies
-
 * cmake >= 3.5
 * make >= 4.1(mac, linux), 3.81(Windows)
 * gcc/g++ >= 5.4
