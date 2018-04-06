@@ -20,6 +20,19 @@ The controller uses the `IPOPT` package to solve for the optimal control inputs 
 ## Lag compensation
 Lag compensation was achieved by propagating the state forward by estimating the system state around the time the actuator command would actually be given. This was done using the dyammic model of the system and current throttle and steering value. Ideally, the acceleration of the vehicle should be used here but throttle is used as an approximation to it. Line `145 - 152` implement this case. The performance was tested for 100ms of lag.
 
+## Tuning
+Tuning was performed by an educated trial and error. High weightage was given to cross-track and heading errors. This however, caused osciallations. To prevent them the weightage to the actuation magnitude and change is actuation magnitudes was increased. The final weight values are as follows:
+
+```
+// Weights for the cost function
+#define W_CTE 1000      // Cross track error
+#define W_EPSI 1000     // Heading error
+#define W_V 1           // Velocity error
+#define W_DELTA 50000   // Steering angle command
+#define W_A 50          // Throttle command 
+#define W_DDELTA 500000 // Change in steering angle 
+#define W_DA 10         // Change in throttle 
+```
 
 ## Dependencies
 * cmake >= 3.5
